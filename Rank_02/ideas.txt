@@ -1,0 +1,3 @@
+Meter las ultimas 3 lineas de stack init en el main si cabe al final
+
+Meter addNode en stack_utilities si cabe
