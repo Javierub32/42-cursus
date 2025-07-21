@@ -22,3 +22,63 @@ int	is_stack_sorted(t_stack *current)
 	}
 	return (0);
 }
+
+int	*stack_to_array(t_stack *a, int size)
+{
+	int	*arr;
+	t_stack	*cur;
+	int	i;
+
+	arr = malloc(sizeof(int) * size);
+	if (!arr)
+		return (NULL);
+	cur = a;
+	i = 0;
+	while (cur)
+	{
+		arr[i++] = cur->value;
+		cur = cur->next;
+	}
+	return (arr);
+}
+
+int	stack_size(t_stack *stack)
+{
+	int	size;
+
+	size = 0;
+	while (stack)
+	{
+		size++;
+		stack = stack->next;
+	}
+	return (size);
+}
+
+void normalize_stack(t_stack *a, int size)
+{
+    int      *arr;
+    t_stack  *cur;
+    int       i;
+
+    arr = stack_to_array(a, size);
+    if (!arr)
+        return;
+    ft_sort(arr, size);
+    cur = a;
+    while (cur)
+    {
+        i = 0;
+        while (i < size)
+        {
+            if (arr[i] == cur->normalization)
+            {
+                cur->normalization = i;
+                break;
+            }
+            i++;
+        }
+        cur = cur->next;
+    }
+    free(arr);
+}

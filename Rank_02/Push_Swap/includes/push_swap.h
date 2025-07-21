@@ -20,6 +20,7 @@
 typedef struct s_stack
 {
 	int				value;
+	int				normalization;
 	struct s_stack	*next;
 	struct s_stack	*prev;
 }	t_stack;
@@ -50,5 +51,13 @@ void	reverse_rotate(t_stack **stack);
 void	rra(t_stack **a);
 void	rrb(t_stack **b);
 void	rrr(t_stack **a, t_stack **b);
+
+int		*stack_to_array(t_stack *a, int size);
+int		stack_size(t_stack *stack);
+void	ft_sort(int *tab, unsigned int size);
+void normalize_stack(t_stack *a, int size);
+void apply_radix(t_stack **a, t_stack **b);
+
+
 
 #endif

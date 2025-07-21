@@ -27,6 +27,7 @@ void	add_node(t_stack **a, int value)
 	}
 	new_node = (t_stack *)malloc(sizeof(t_stack));
 	new_node->value = value;
+	new_node->normalization = value;
 	new_node->prev = current;
 	new_node->next = NULL;
 	current->next = new_node;
@@ -46,6 +47,7 @@ void	stack_init(t_stack **a, char **nbrs)
 			head->prev = NULL;
 			head->next = NULL;
 			head->value = (int)ft_atol(nbrs[i]);
+			head->normalization = (int)ft_atol(nbrs[i]);
 			*a = head;
 		}
 		else
