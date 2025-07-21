@@ -25,7 +25,7 @@ typedef struct s_stack
 	struct s_stack	*prev;
 }	t_stack;
 
-void	parse_arguments(int argc, char **argv, char **nbrs, t_stack **a);
+char	**parse_arguments(int argc, char **argv);
 void	print_error(void);
 long	ft_atol(char *str);
 void	add_node(t_stack **a, int value);
@@ -55,9 +55,9 @@ void	rrr(t_stack **a, t_stack **b);
 int		*stack_to_array(t_stack *a, int size);
 int		stack_size(t_stack *stack);
 void	ft_sort(int *tab, unsigned int size);
-void normalize_stack(t_stack *a, int size);
-void apply_radix(t_stack **a, t_stack **b);
-
-
+void	normalize_stack(t_stack *a, int size);
+void	apply_radix(t_stack **a, t_stack **b);
+void	sort_stack(t_stack **a, t_stack **b);
+void	free_stack(t_stack **stack);
 
 #endif

@@ -14,20 +14,22 @@
 
 int	is_stack_sorted(t_stack *current)
 {
+	if (!current)
+		return (1);
 	while (current->next)
 	{
 		if (current->value > current->next->value)
-			return (1);
+			return (0);
 		current = current->next;
 	}
-	return (0);
+	return (1);
 }
 
 int	*stack_to_array(t_stack *a, int size)
 {
-	int	*arr;
+	int		*arr;
 	t_stack	*cur;
-	int	i;
+	int		i;
 
 	arr = malloc(sizeof(int) * size);
 	if (!arr)
@@ -55,30 +57,19 @@ int	stack_size(t_stack *stack)
 	return (size);
 }
 
-void normalize_stack(t_stack *a, int size)
+void	free_stack(t_stack **stack)
 {
-    int      *arr;
-    t_stack  *cur;
-    int       i;
+	t_stack	*current;
+	t_stack	*next;
 
-    arr = stack_to_array(a, size);
-    if (!arr)
-        return;
-    ft_sort(arr, size);
-    cur = a;
-    while (cur)
-    {
-        i = 0;
-        while (i < size)
-        {
-            if (arr[i] == cur->normalization)
-            {
-                cur->normalization = i;
-                break;
-            }
-            i++;
-        }
-        cur = cur->next;
-    }
-    free(arr);
+	if (!stack || !*stack)
+		return ;
+	current = *stack;
+	while (current)
+	{
+		next = current->next;
+		free(current);
+		current = next;
+	}
+	*stack = NULL;
 }

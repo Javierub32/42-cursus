@@ -49,8 +49,10 @@ static void	check_arguments(char **nbrs)
 	}
 }
 
-void	parse_arguments(int argc, char **argv, char **nbrs, t_stack **a)
+char	**parse_arguments(int argc, char **argv)
 {
+	char	**nbrs;
+
 	if (argc == 2)
 	{
 		if (!argv[1][0])
@@ -60,7 +62,5 @@ void	parse_arguments(int argc, char **argv, char **nbrs, t_stack **a)
 	else
 		nbrs = argv + 1;
 	check_arguments(nbrs);
-	stack_init(a, nbrs);
-	if (argc == 2)
-		free_array(nbrs);
+	return (nbrs);
 }

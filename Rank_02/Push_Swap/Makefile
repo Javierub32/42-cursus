@@ -26,8 +26,7 @@ SRC       = $(SRCDIR)/push_swap.c \
 			$(SRCDIR)/operations/swap.c \
 			$(SRCDIR)/operations/rotate.c \
 			$(SRCDIR)/operations/reverse_rotate.c \
-			$(SRCDIR)/algorithm/sort_utils.c \
-			$(SRCDIR)/algorithm/radix_sort.c \
+			$(SRCDIR)/algorithm/radix_sort.c 
 
 OBJ       = $(SRC:.c=.o)
 

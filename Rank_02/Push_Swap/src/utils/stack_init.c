@@ -14,15 +14,12 @@
 
 void	add_node(t_stack **a, int value)
 {
-	t_stack	*prev;
 	t_stack	*current;
 	t_stack	*new_node;
 
-	prev = NULL;
 	current = *a;
 	while (current->next)
 	{
-		prev = current;
 		current = current->next;
 	}
 	new_node = (t_stack *)malloc(sizeof(t_stack));
