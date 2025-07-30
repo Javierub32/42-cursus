@@ -2,20 +2,16 @@ CC        = cc
 CFLAGS    = -Wall -Wextra -Werror \
             -I./lib/libft -I./lib/printf -I./includes
 
-# Name of the program
-NAME      = test_push_swap
+NAME      = push_swap
 
-# Colors for output
 BLUE	  = \033[94m
 RESET	  = \033[0m
 
-# Libraries
 LIBFT_DIR  = lib/libft
 PRINTF_DIR = lib/printf
 LIBFT      = $(LIBFT_DIR)/libft.a
 PRINTF  = $(PRINTF_DIR)/libftprintf.a
 
-# Src and object files
 SRCDIR    = src
 SRC       = $(SRCDIR)/push_swap.c \
             $(SRCDIR)/utils/parse_arguments.c \
@@ -26,7 +22,7 @@ SRC       = $(SRCDIR)/push_swap.c \
 			$(SRCDIR)/operations/swap.c \
 			$(SRCDIR)/operations/rotate.c \
 			$(SRCDIR)/operations/reverse_rotate.c \
-			$(SRCDIR)/algorithm/radix_sort.c 
+			$(SRCDIR)/algorithm/radix_sort.c
 
 OBJ       = $(SRC:.c=.o)
 

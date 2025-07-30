@@ -29,19 +29,26 @@ static int	sign_without_number(char **nbrs)
 
 static void	check_arguments(char **nbrs)
 {
-	int	i;
-	int	j;
+	int		i;
+	int		j;
+	long	nbr;
+	size_t	lenght;
 
 	i = 0;
 	if (sign_without_number(nbrs))
 		print_error();
 	while (nbrs[i])
 	{
+		nbr = ft_atol(nbrs[i]);
+		lenght = ft_strlen(nbrs[i]);
+		if (lenght > 11)
+			print_error();
+		if (nbr > 2147483647 || nbr < -2147483648)
+			print_error();
 		j = i + 1;
-		ft_atol(nbrs[i]);
 		while (nbrs[j])
 		{
-			if (ft_atol(nbrs[i]) == ft_atol(nbrs[j]))
+			if (nbr == ft_atol(nbrs[j]))
 				print_error();
 			j++;
 		}

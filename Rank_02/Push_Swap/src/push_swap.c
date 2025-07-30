@@ -22,7 +22,7 @@ int	main(int argc, char **argv)
 	b = NULL;
 	nbrs = NULL;
 	if (argc < 2)
-		return (ft_printf("Usage: %s <arguments>\n", argv[0]), 1);
+		return (1);
 	nbrs = parse_arguments(argc, argv);
 	stack_init(&a, nbrs);
 	if (argc == 2)
