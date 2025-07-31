@@ -22,19 +22,22 @@
 # include <string.h>
 # include <sys/wait.h> 
 
-# define ERR_NO_FILE        2   // ENOENT: No such file or directory
-# define ERR_IO             5   // EIO: Input/output error
-# define ERR_PERMISSION     13  // EACCES: Permission denied
-# define ERR_INVALID_ARG    22  // EINVAL: Invalid argument
+# define ERR_NO_FILE		2
+# define ERR_IO				5
+# define ERR_PERMISSION		13
+# define ERR_INVALID_ARG	22
 
-// Errores relacionados con procesos
-# define ERR_NO_PROCESS     3   // ESRCH: No such process
-# define ERR_INTERRUPTED    4   // EINTR: Interrupted system call
-# define ERR_NO_CHILD       10  // ECHILD: No child processes
-# define ERR_NO_RESOURCE    11  // EAGAIN: Resource temporarily unavailable
-# define ERR_BROKEN_PIPE    32  // EPIPE: Broken pipe
+# define ERR_NO_PROCESS		3
+# define ERR_INTERRUPTED	4
+# define ERR_NO_CHILD		10
+# define ERR_NO_RESOURCE	11
+# define ERR_BROKEN_PIPE	32
 
-void	check_errors(int argc, char **argv);
+void	check_initial_errors(int argc, char **argv);
 void	print_error(int error_code);
+void	wait_process(int *fd, pid_t pid1, pid_t pid2);
+void	handle_left_pipe(char **argv, char **envp, int *fd);
+void	handle_right_pipe(char **argv, char **envp, int *fd);
 
+void	execute_command(char *argv, char **envp);
 #endif

@@ -1,32 +1,43 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jurbanej <jurbanej@student.42malaga.c      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/20 10:41:43 by jurbanej          #+#    #+#             */
+/*   Updated: 2025/07/20 10:41:50 by jurbanej         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
 void	print_error(int error_code)
 {
 	if (error_code == ERR_NO_FILE)
-		ft_printf("Error: No such file or directory.\n");
+		write(2, "Error: No such file or directory.\n", 34);
 	else if (error_code == ERR_IO)
-		ft_printf("Error: Input/output error.\n");
+		write(2, "Error: Input/output error.\n", 27);
 	else if (error_code == ERR_PERMISSION)
-		ft_printf("Error: Permission denied.\n");
+		write(2, "Error: Permission denied.\n", 26);
 	else if (error_code == ERR_INVALID_ARG)
-		ft_printf("Error: Invalid arguments.\n");
+		write(2, "Error: Invalid arguments.\n", 26);
 	else if (error_code == ERR_INTERRUPTED)
-		ft_printf("Error: Interrupted system call.\n");
+		write(2, "Error: Interrupted system call.\n", 32);
 	else if (error_code == ERR_NO_PROCESS)
-		ft_printf("Error: No such process!\n");
+		write(2, "Error: No such process!\n", 24);
 	else if (error_code == ERR_NO_CHILD)
-		ft_printf("Error: No child processes!\n");
+		write(2, "Error: No child processes!\n", 27);
 	else if (error_code == ERR_NO_RESOURCE)
-		ft_printf("Error: Resource temporarily unavailable!\n");
+		write(2, "Error: Resource temporarily unavailable!\n", 41);
 	else if (error_code == ERR_BROKEN_PIPE)
-		ft_printf("Error: Broken pipe. Pipe write error!\n");
+		write(2, "Error: Broken pipe. Pipe write error!\n", 38);
 	else
-		ft_printf("Error: Unknown error occurred.\n");
+		write(2, "Error: Unknown error occurred.\n", 31);
 	exit(1);
 }
 
-void	check_errors(int argc, char **argv)
+void	check_initial_errors(int argc, char **argv)
 {
 	int	output_file;
 
@@ -36,14 +47,13 @@ void	check_errors(int argc, char **argv)
 		print_error(ERR_NO_FILE);
 	else if (access(argv[1], R_OK) != 0)
 		print_error(ERR_PERMISSION);
+	else if (ft_strlen(argv[2]) == 0 || ft_strlen(argv[3]) == 0)
+		print_error(ERR_INVALID_ARG);
 	else if ((access(argv[4], F_OK) != 0))
 	{
-		output_file = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+		output_file = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 511);
 		if (output_file == -1)
 			print_error(ERR_NO_FILE);
-		else
-			// If the file does not exist, it will be created with write permissions.
-			ft_printf("Output file created successfully.\n");
 		close(output_file);
 		if (access(argv[4], W_OK) != 0)
 			print_error(ERR_PERMISSION);
