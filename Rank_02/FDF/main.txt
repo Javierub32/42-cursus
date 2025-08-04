@@ -1,0 +1,87 @@
+#include <mlx.h>
+#include <stdlib.h>
+#include "fdf.h"
+#include <fcntl.h>
+#include <stdio.h>
+
+#define WIN_W 400
+#define WIN_H 300
+
+typedef struct  s_vars {
+    void    *mlx;
+    void    *win;
+}               t_vars;
+
+/* Se ejecuta al pulsar cualquier tecla: destruye la ventana y sale. */
+int handle_key(int keycode, t_vars *vars)
+{
+    if (keycode == 'j' || keycode == 'J')
+    {
+        mlx_destroy_window(vars->mlx, vars->win);
+        exit(0);
+    }
+    return (0);
+}
+
+/* Función para probar get_next_line */
+void test_get_next_line(void)
+{
+    int fd;
+    char *line;
+
+    printf("=== Test de get_next_line ===\n");
+    fd = open("Makefile", O_RDONLY);
+    if (fd == -1)
+    {
+        printf("Error: No se pudo abrir el Makefile\n");
+        return;
+    }
+
+    printf("Leyendo las primeras 3 líneas del Makefile:\n");
+    for (int i = 0; i < 3; i++)
+    {
+        line = get_next_line(fd);
+        if (line)
+        {
+            printf("Línea %d: %s", i + 1, line);
+            free(line);
+        }
+        else
+        {
+            printf("Línea %d: (fin de archivo)\n", i + 1);
+            break;
+        }
+    }
+    close(fd);
+    printf("=== Fin del test ===\n\n");
+}
+
+int main(void)
+{
+    t_vars vars;
+
+    /* Probar get_next_line */
+    test_get_next_line();
+
+    /* Inicializa la conexión con el servidor gráfico */
+    vars.mlx = mlx_init();
+    if (!vars.mlx)
+        return (1);
+
+    /* Crea una ventana de 400×300 píxeles */
+    vars.win = mlx_new_window(vars.mlx, WIN_W, WIN_H, "Test MiniLibX");
+    if (!vars.win)
+        return (1);
+
+    /* Dibuja un píxel rojo en el centro de la ventana */
+    mlx_pixel_put(vars.mlx, vars.win, WIN_W / 2, WIN_H / 2, 0x00FF0000);
+
+    /* Escribe un texto blanco en la esquina superior izquierda */
+    mlx_string_put(vars.mlx, vars.win, 10, 10, 0x00FFFFFF, "¡MiniLibX funciona!");
+
+    /* Registra el manejador de teclas y entra en el bucle de eventos */
+    mlx_key_hook(vars.win, handle_key, &vars);
+    mlx_loop(vars.mlx);
+
+    return (0);
+}
