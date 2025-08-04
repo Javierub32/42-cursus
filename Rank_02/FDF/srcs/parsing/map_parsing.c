@@ -1,33 +1,26 @@
 #include "../../includes/fdf.h"
 
-static int	read_width(char* file);
+static int	read_width(char *file);
 static int	read_height(char *file);
+static int	*fill_line(char *line, int width);
+static void	fill_map(t_map *map, char *file, int width);
 
 void	init_map(t_map *map, char **argv)
 {
-	int width;
-	int height;
-	int **data;
+	int	width;
+	int	height;
 
-	(void)data; // To avoid unused variable warning
 	width = read_width(argv[1]);
 	height = read_height(argv[1]);
 	map->width = width;
 	map->height = height;
-
-	write(1, "Map initialized with width: ", 28);
-	ft_putnbr_fd(map->width, 1);
-	write(1, "\n", 1);
-	write(1, "Map initialized with height: ", 29);
-	ft_putnbr_fd(map->height, 1);
-	write(1, "\n", 1);
-
 	if (map->width <= 0 || map->height <= 0)
 		print_error("Invalid map dimensions");
-	fill_map(map, argv[1]);
+	fill_map(map, argv[1], width);
+	print_map(map->data, map->height, map->width);
 }
 
-static int	read_width(char* file)
+static int	read_width(char *file)
 {
 	int		fd;
 	int		width;
@@ -35,22 +28,21 @@ static int	read_width(char* file)
 	char	**numbers;
 
 	fd = open_file(file);
-	width = 0;
-	while ((line = get_next_line(fd)) != NULL)
+	line = get_next_line(fd);
+	numbers = ft_split(line, ' ');
+	width = count_words(numbers);
+	free_split(numbers);
+	while (line != NULL)
 	{
 		numbers = ft_split(line, ' ');
-		if (width == 0)
-			width = count_words(numbers);
-		else
+		if (count_words(numbers) != width)
 		{
-			if (count_words(numbers) != width)
-			{
-				cleanup_parsing(numbers, line, fd);
-				print_error("Error: The matrix is not rectangular");
-				exit(EXIT_FAILURE);
-			}
+			cleanup_parsing(numbers, line, fd);
+			print_error("The matrix is not rectangular");
+			exit(EXIT_FAILURE);
 		}
 		cleanup_parsing(numbers, line, -1);
+		line = get_next_line(fd);
 	}
 	close(fd);
 	return (width);
@@ -64,54 +56,58 @@ static int	read_height(char *file)
 
 	fd = open_file(file);
 	height = 0;
-	while ((line = get_next_line(fd)) != NULL)
+	line = get_next_line(fd);
+	while (line != NULL)
 	{
 		height++;
 		free(line);
+		line = get_next_line(fd);
 	}
 	close(fd);
 	return (height);
 }
 
-void	fill_map(t_map *map, char *file)
+static void	fill_map(t_map *map, char *file, int width)
 {
 	int		fd;
 	char	*line;
-	char	**numbers;
 	int		i;
-	int		j;
 
 	fd = open_file(file);
 	map->data = malloc(sizeof(int *) * map->height);
 	if (!map->data)
 		print_error("Memory allocation failed for map data");
 	i = 0;
-	j = 0;
-	while ((line = get_next_line(fd)) != NULL)
+	line = get_next_line(fd);
+	while (line != NULL)
 	{
-		numbers = ft_split(line, ' ');
-		map->data[i] = malloc(sizeof(int) * map->width);
-		if (!map->data[i])
-			print_error("Memory allocation failed for map row");
-		fill_line(map->data[i], numbers, map->width);
-		cleanup_parsing(numbers, line, -1);
+		map->data[i] = fill_line(line, width);
+		free(line);
+		line = get_next_line(fd);
 		i++;
 	}
 	close(fd);
 }
 
-void	fill_line(int *line, char **numbers, int width)
+static int	*fill_line(char *line, int width)
 {
-	int j;
+	char	**numbers;
+	int		*result;
+	int		i;
 
-	j = 0;
-	while (j < width)
+	numbers = ft_split(line, ' ');
+	result = malloc(sizeof(int) * width);
+	if (!result)
 	{
-		line[j] = ft_atoi(numbers[j]);
-		j++;
+		free_split(numbers);
+		print_error("Memory allocation failed for row.");
 	}
-	if (j != width)
-		print_error("Error: The number of elements in the line does not match the width");
-	return (line);
+	i = 0;
+	while (numbers[i])
+	{
+		result[i] = ft_atoi(numbers[i]);
+		i++;
+	}
+	free_split(numbers);
+	return (result);
 }
-

@@ -42,5 +42,6 @@ int	open_file(char *file);
 void	free_split(char **split);
 int		count_words(char **split);
 void	cleanup_parsing(char **split, char *line, int fd);
+void print_map(int **map, int height, int width);
 
 #endif

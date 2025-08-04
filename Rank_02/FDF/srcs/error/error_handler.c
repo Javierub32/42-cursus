@@ -1,6 +1,6 @@
 #include "../../includes/fdf.h"
 
-void print_error(const char *message)
+void	print_error(const char *message)
 {
 	ft_putstr_fd("Error: ", 2);
 	ft_putstr_fd(message, 2);
