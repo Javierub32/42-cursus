@@ -12,31 +12,35 @@
 
 #include "../includes/pipex.h"
 
+static void	create_child_process(t_input data, int **pipes, pid_t *pids, int i)
+{
+	pids[i] = fork();
+	if (pids[i] == -1)
+		print_error(ERR_NO_CHILD);
+	if (pids[i] == 0)
+		handle_child_process(data, pipes, i);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
-	int	fd[2];
-	int	pid_left_child;
-	int	pid_right_child;
+	int		**pipes;
+	pid_t	*pids;
+	int		i;
+	t_input	input_data;
 
 	check_initial_errors(argc, argv);
-	if (pipe(fd) == -1)
-		print_error(ERR_BROKEN_PIPE);
-	pid_left_child = fork();
-	if (pid_left_child < 0)
-		print_error(ERR_NO_CHILD);
-	else if (pid_left_child == 0)
+	input_data = (t_input){argc, argv, envp, argc - 3};
+	pipes = create_pipes(input_data.num_cmds - 1);
+	pids = malloc(sizeof(pid_t) * input_data.num_cmds);
+	if (!pipes || !pids)
+		print_error(ERR_NO_RESOURCE);
+	i = 0;
+	while (i < input_data.num_cmds)
 	{
-		handle_left_pipe(argv, envp, fd);
+		create_child_process(input_data, pipes, pids, i);
+		i++;
 	}
-	else
-	{
-		pid_right_child = fork();
-		if (pid_right_child < 0)
-			print_error(ERR_NO_CHILD);
-		else if (pid_right_child == 0)
-			handle_right_pipe(argv, envp, fd);
-		else
-			wait_process(fd, pid_left_child, pid_right_child);
-	}
-	return (0);
+	close_all_pipes(pipes, input_data.num_cmds - 1);
+	wait_all_processes(pids, input_data.num_cmds);
+	return (free_pipes(pipes, input_data.num_cmds - 1), free(pids), 0);
 }

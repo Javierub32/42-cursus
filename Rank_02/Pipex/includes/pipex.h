@@ -22,6 +22,15 @@
 # include <string.h>
 # include <sys/wait.h> 
 
+typedef struct s_input
+{
+	int		argc;
+	char	**argv;
+	char	**env;
+	int		num_cmds;
+
+}	t_input;
+
 # define ERR_NO_FILE		2
 # define ERR_IO				5
 # define ERR_PERMISSION		13
@@ -33,11 +42,17 @@
 # define ERR_NO_RESOURCE	11
 # define ERR_BROKEN_PIPE	32
 
+//Error handling functions
 void	check_initial_errors(int argc, char **argv);
 void	print_error(int error_code);
-void	wait_process(int *fd, pid_t pid1, pid_t pid2);
-void	handle_left_pipe(char **argv, char **envp, int *fd);
-void	handle_right_pipe(char **argv, char **envp, int *fd);
 
+// Child process handling functions
+void	free_pipes(int **pipes, int num_pipes);
+int		**create_pipes(int num_pipes);
+void	close_all_pipes(int **pipes, int num_pipes);
+void	wait_all_processes(pid_t *pids, int num_processes);
+
+// Child process execution functions
+void	handle_child_process(t_input data, int **pipes, int cmd_index);
 void	execute_command(char *argv, char **envp);
 #endif

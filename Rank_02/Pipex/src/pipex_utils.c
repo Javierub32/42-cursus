@@ -12,57 +12,62 @@
 
 #include "../includes/pipex.h"
 
-void	handle_left_pipe(char **argv, char **envp, int *fd)
+int	**create_pipes(int num_pipes)
 {
-	int	input_file;
+	int	**pipes;
+	int	i;
 
-	input_file = open(argv[1], O_RDONLY, 0777);
-	if (input_file == -1)
-		print_error(ERR_NO_FILE);
-	if (dup2(fd[1], STDOUT_FILENO) == -1)
+	pipes = malloc(sizeof(int *) * num_pipes);
+	if (!pipes)
+		print_error(ERR_NO_RESOURCE);
+	i = 0;
+	while (i < num_pipes)
 	{
-		close(fd[1]);
-		print_error(ERR_INTERRUPTED);
+		pipes[i] = malloc(sizeof(int) * 2);
+		if (!pipes[i])
+			print_error(ERR_NO_RESOURCE);
+		if (pipe(pipes[i]) == -1)
+			print_error(ERR_BROKEN_PIPE);
+		i++;
 	}
-	if (dup2(input_file, STDIN_FILENO) == -1)
-	{
-		close(input_file);
-		print_error(ERR_INTERRUPTED);
-	}
-	close(fd[0]);
-	close(input_file);
-	execute_command(argv[2], envp);
+	return (pipes);
 }
 
-void	handle_right_pipe(char **argv, char **envp, int *fd)
+void	close_all_pipes(int **pipes, int num_pipes)
 {
-	int	output_file;
+	int	i;
 
-	output_file = open(argv[4], O_WRONLY | O_TRUNC, 0777);
-	if (output_file == -1)
-		print_error(ERR_NO_FILE);
-	if (dup2(fd[0], STDIN_FILENO) == -1)
+	i = 0;
+	while (i < num_pipes)
 	{
-		close(fd[0]);
-		print_error(ERR_INTERRUPTED);
+		close(pipes[i][0]);
+		close(pipes[i][1]);
+		i++;
 	}
-	if (dup2(output_file, STDOUT_FILENO) == -1)
-	{
-		close(output_file);
-		print_error(ERR_INTERRUPTED);
-	}
-	close(fd[0]);
-	close(fd[1]);
-	close(output_file);
-	execute_command(argv[3], envp);
 }
 
-void	wait_process(int *fd, pid_t pid1, pid_t pid2)
+void	wait_all_processes(pid_t *pids, int num_processes)
 {
-	close(fd[0]);
-	close(fd[1]);
-	if (waitpid(pid1, NULL, 0) == -1)
-		print_error(ERR_INTERRUPTED);
-	if (waitpid(pid2, NULL, 0) == -1)
-		print_error(ERR_INTERRUPTED);
+	int	i;
+
+	i = 0;
+	while (i < num_processes)
+	{
+		if (waitpid(pids[i], NULL, 0) == -1)
+			print_error(ERR_INTERRUPTED);
+		i++;
+	}
+}
+
+void	free_pipes(int **pipes, int num_pipes)
+{
+	int	i;
+
+	i = 0;
+	while (i < num_pipes)
+	{
+		free(pipes[i]);
+		i++;
+	}
+	free(pipes);
 }

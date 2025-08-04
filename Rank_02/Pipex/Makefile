@@ -16,9 +16,8 @@ SRCDIR    = src
 SRC       = $(SRCDIR)/pipex.c \
 			$(SRCDIR)/error_utils.c \
 			$(SRCDIR)/pipex_utils.c \
-			$(SRCDIR)/command_utils.c
-
-
+			$(SRCDIR)/command_utils.c \
+			$(SRCDIR)/child_process_handler.c 
 
 OBJ       = $(SRC:.c=.o)
 
