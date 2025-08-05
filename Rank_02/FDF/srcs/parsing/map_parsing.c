@@ -14,10 +14,10 @@ void	init_map(t_map *map, char **argv)
 	height = read_height(argv[1]);
 	map->width = width;
 	map->height = height;
+	map->size = width * height;
 	if (map->width <= 0 || map->height <= 0)
 		print_error("Invalid map dimensions");
 	fill_map(map, argv[1], width);
-	print_map(map->data, map->height, map->width);
 }
 
 static int	read_width(char *file)
