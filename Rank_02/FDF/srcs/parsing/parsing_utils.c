@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_utils.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jurbanej <jurbanej@student.42malaga.c      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/06 11:32:13 by jurbanej          #+#    #+#             */
+/*   Updated: 2025/08/06 11:32:14 by jurbanej         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/fdf.h"
 
 int	open_file(char *file)
@@ -45,4 +57,3 @@ void	cleanup_parsing(char **split, char *line, int fd)
 	if (fd >= 0)
 		close(fd);
 }
-

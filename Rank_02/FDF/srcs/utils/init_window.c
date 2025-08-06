@@ -1,31 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_handler.c                                    :+:      :+:    :+:   */
+/*   draw_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jurbanej <jurbanej@student.42malaga.c      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/06 11:31:39 by jurbanej          #+#    #+#             */
-/*   Updated: 2025/08/06 11:31:42 by jurbanej         ###   ########.fr       */
+/*   Created: 2025/08/06 11:33:14 by jurbanej          #+#    #+#             */
+/*   Updated: 2025/08/06 11:33:15 by jurbanej         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/fdf.h"
 
-void	print_error(const char *message)
+void	init_main_window_params(t_vars *window, t_map *map)
 {
-	ft_putstr_fd("Error: ", 2);
-	ft_putstr_fd(message, 2);
-	ft_putstr_fd("\n", 2);
-	exit(1);
-}
-
-int	check_bounds(t_vars *window, t_projection *p1, t_projection *p2)
-{
-	if ((p1->px < 0 && p2->px < 0)
-		|| (p1->px >= window->width && p2->px >= window->width)
-		|| (p1->py < 0 && p2->py < 0)
-		|| (p1->py >= window->height && p2->py >= window->height))
-		return (1);
-	return (0);
+	window->height = 720;
+	window->width = 1280;
+	window->angle_x = 0.523599;
+	window->angle_y = 0.523599;
+	window->scale = 10.0;
+	if (map->width > 50 || map->height > 50)
+		window->scale = 10.0;
+	if (map->width > 100 || map->height > 100)
+		window->scale = 5.0;
+	window->offset_x = window->width / 2;
+	window->offset_y = window->height / 2;
 }

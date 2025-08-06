@@ -18,10 +18,18 @@ GNL_OBJ    = $(GNL_SRC:.c=.o)
 MLX        = $(MLX_DIR)/libmlx.a
 
 SRCDIR    = srcs
-SRC       = $(SRCDIR)/main.c \
+SRC       = $(SRCDIR)/fdf.c \
 			$(SRCDIR)/parsing/map_parsing.c \
 			$(SRCDIR)/parsing/parsing_utils.c \
-			$(SRCDIR)/error/error_handler.c
+			$(SRCDIR)/error/error_handler.c \
+			$(SRCDIR)/utils/clear_utils.c \
+			$(SRCDIR)/points/points.c \
+			$(SRCDIR)/events/events.c \
+			$(SRCDIR)/drawing/draw.c \
+			$(SRCDIR)/drawing/draw_utils.c \
+			$(SRCDIR)/utils/init_window.c \
+			$(SRCDIR)/utils/utils.c
+
 
 HEADERS   = includes/fdf.h lib/get_next_line/get_next_line.h
 

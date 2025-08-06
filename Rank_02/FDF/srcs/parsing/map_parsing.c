@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map_parsing.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jurbanej <jurbanej@student.42malaga.c      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/08/06 11:32:02 by jurbanej          #+#    #+#             */
+/*   Updated: 2025/08/06 11:32:03 by jurbanej         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/fdf.h"
 
 static int	read_width(char *file);
@@ -29,6 +41,8 @@ static int	read_width(char *file)
 
 	fd = open_file(file);
 	line = get_next_line(fd);
+	if (!line)
+		print_error("Empty file or read error");
 	numbers = ft_split(line, ' ');
 	width = count_words(numbers);
 	free_split(numbers);
@@ -39,7 +53,6 @@ static int	read_width(char *file)
 		{
 			cleanup_parsing(numbers, line, fd);
 			print_error("The matrix is not rectangular");
-			exit(EXIT_FAILURE);
 		}
 		cleanup_parsing(numbers, line, -1);
 		line = get_next_line(fd);
@@ -57,6 +70,8 @@ static int	read_height(char *file)
 	fd = open_file(file);
 	height = 0;
 	line = get_next_line(fd);
+	if (!line)
+		print_error("Empty file or read error");
 	while (line != NULL)
 	{
 		height++;
