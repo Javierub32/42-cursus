@@ -55,7 +55,7 @@ void	check_initial_errors(int argc, char **argv)
 {
 	int	output_file;
 
-	if (argc != 5)
+	if (argc < 5)
 		print_error(ERR_INVALID_ARG);
 	else if (access(argv[1], F_OK) != 0)
 		print_error(ERR_NO_FILE);

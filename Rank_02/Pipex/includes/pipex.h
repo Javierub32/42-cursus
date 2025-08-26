@@ -20,7 +20,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <string.h>
-# include <sys/wait.h> 
+# include <sys/wait.h>
 
 typedef struct s_input
 {
@@ -30,6 +30,13 @@ typedef struct s_input
 	int		num_cmds;
 
 }	t_input;
+
+typedef struct s_release
+{
+	int		**pipes;
+	pid_t	*pids;
+	int		num_pipes;
+}	t_release;
 
 # define ERR_NO_FILE		2
 # define ERR_IO				5
@@ -42,17 +49,14 @@ typedef struct s_input
 # define ERR_NO_RESOURCE	11
 # define ERR_BROKEN_PIPE	32
 
-//Error handling functions
 void	check_initial_errors(int argc, char **argv);
 void	print_error(int error_code);
 
-// Child process handling functions
 void	free_pipes(int **pipes, int num_pipes);
 int		**create_pipes(int num_pipes);
 void	close_all_pipes(int **pipes, int num_pipes);
 void	wait_all_processes(pid_t *pids, int num_processes);
 
-// Child process execution functions
-void	handle_child_process(t_input data, int **pipes, int cmd_index);
-void	execute_command(char *argv, char **envp);
+void	handle_child_process(t_input data, int cmd_index, t_release *release);
+void	execute_command(char *argv, char **envp, t_release *release);
 #endif
